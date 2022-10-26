@@ -1,0 +1,36 @@
+spring-cloud DOCS
+    https://docs.spring.io/spring-cloud-gcp/docs/current/reference/html/spring-stream.html
+
+
+spring-cloud GCP-BINDER
+    https://github.com/spring-attic/spring-cloud-gcp/tree/main/spring-cloud-gcp-samples/spring-cloud-gcp-pubsub-binder-sample
+    https://www.springcloud.io/post/2021-12/spring-cloud-stream-binder-pubsub/#gsc.tab=0
+    https://cloud.spring.io/spring-cloud-static/Greenwich.RELEASE/multi/multi__google_cloud_pub_sub.html
+
+spring-cloud-stream - samples
+    https://github.com/LarryDpk/pkslow-samples/tree/master/spring-cloud/spring-cloud-stream
+    https://docs.spring.io/spring-cloud-stream/docs/Elmhurst.SR2/reference/html/_programming_model.html
+
+
+spring-cloud-stream - Multi-binder
+    https://github.com/spring-cloud/spring-cloud-stream-samples/tree/main/multi-binder-samples
+
+
+:AVRO:
+    https://www.baeldung.com/spring-cloud-stream-kafka-avro-confluent
+    https://github.com/eugenp/tutorials/tree/master/spring-cloud-modules/spring-cloud-stream/spring-cloud-stream-kafka
+
+
+:: REST PROXY
+    https://daniel.arneam.com/blog/distributedarchitecture/2020-11-23-Kafka-Schema-Registry-REST-Proxy-Concepts/
+
+::ISSUEs
+    https://github.com/spring-cloud/spring-cloud-stream-binder-kafka/issues/793
+    https://www.confluent.io/blog/schema-registry-avro-in-spring-boot-application-tutorial/
+
+:: Tratamento de Error
+    https://stackoverflow.com/questions/71479145/java-lang-illegalargumentexception-the-project-id-cant-be-null-or-empty
+
+:: Teste Acess Kafka/Schema Registry Com kcat
+    ./kcat  -C -s avro -r "https://{user}:{pass}@{URL-SCHEMA-REGISTRY}/" -b {URM_CLUSTER_KAFKA}:9096 -X security.protocol=SASL_SSL -X sasl.password={PASS} -X sasl.username={USER} -X sasl.mechanism="SCRAM-SHA-512" -X enable.ssl.certificate.verification=false -t {TOPIC_NAME}
+

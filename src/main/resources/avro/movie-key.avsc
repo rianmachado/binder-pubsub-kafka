@@ -1,0 +1,11 @@
+{
+  "namespace": "tech.demo.movie.v1",
+  "type": "record",
+  "name": "MovieKey",
+  "fields": [
+     {
+      "name": "id",
+      "type": "int"
+    }
+  ]
+}

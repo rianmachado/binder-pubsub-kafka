@@ -1,0 +1,39 @@
+spring:
+  cloud:
+    stream:
+      default:
+        producer:
+          useNativeEncoding: true
+      bindings:
+        process-in-0:
+          destination: ${PUBSUB_TOPIC_NAME}
+          binder: pubsub
+          group: ${PUBSUB_SUBSCRIPTION_NAME}
+        sendData-out-0:
+          destination: ${PUBSUB_TOPIC_NAME}
+          binder: pubsub
+        process-out-0:
+          destination: ${KAFKA_TOPIC_NAME}
+          content-type: application/*+avro
+          binder: kafka
+      function:
+        definition: process;sendData
+      kafka:
+        binder:
+          brokers: ${KAFKA_CLUSTER}
+          producer-properties:
+            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+            key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+            schema.registry.url: ${SCHEMA_REGISTRY_URL}
+      default-binder: pubsub
+    schemaRegistryClient:
+      cached: true
+    gcp:
+      credentials:
+        location: file:${GOOGLE_APPLICATION_CREDENTIALS}
+      pubsub:
+        subscriber:
+          max-ack-extension-period: 10
+          parallel-pull-count: 6
+          retry:
+            max-attempts: 3
