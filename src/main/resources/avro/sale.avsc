@@ -1,0 +1,15 @@
+{
+    "type": "record",
+    "name": "Sale",
+    "namespace": "pub_sub.sale.v1",
+    "fields": [
+        {
+            "name": "originSystem",
+            "required": true,
+            "type": {
+                "type": "string",
+                "name": "OriginSystem"
+            }
+        }
+    ]
+}

@@ -1,9 +1,9 @@
 {
-  "namespace": "tech.demo.movie.v1",
+  "namespace": "pub_sub.sale.v1",
   "type": "record",
-  "name": "MovieKey",
+  "name": "SaleKey",
   "fields": [
-     {
+    {
       "name": "id",
       "type": "int"
     }

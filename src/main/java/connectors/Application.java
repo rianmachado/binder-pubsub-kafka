@@ -6,7 +6,10 @@ package connectors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import connectors.dto.SaleKey;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.generic.GenericRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,8 +26,8 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
-import tech.demo.movie.v1.Movie;
-import tech.demo.movie.v1.MovieKey;
+
+
 
 @SpringBootApplication
 @Slf4j
@@ -46,13 +49,13 @@ public class Application {
 	}
 
 	@Bean
-	Function<Message<String>, Message<Movie>> process(){
+	Function<Message<String>, Message<GenericRecord>> process(){
 		return payload -> {
 			BasicAcknowledgeablePubsubMessage pubsub = (BasicAcknowledgeablePubsubMessage) payload.getHeaders()
 					.get(GcpPubSubHeaders.ORIGINAL_MESSAGE);
-			Movie avro =  service.jsonToAvro(pubsub);
-			MovieKey key = service.genaratedKeyAvro();
-			Message<Movie> message = MessageBuilder
+			GenericRecord avro =  service.jsonToAvro(pubsub);
+			SaleKey key = service.genaratedKeyAvro();
+			Message<GenericRecord> message = MessageBuilder
 					.withPayload(avro)
 					.setHeader(KafkaHeaders.MESSAGE_KEY,key)
 					.build();
@@ -76,12 +79,12 @@ public class Application {
 		return adapter;
 	}
 	static class Producer {
-		private AtomicBoolean semaphore = new AtomicBoolean(true);
+		private final AtomicBoolean semaphore = new AtomicBoolean(true);
 		@Bean
 		Supplier<String> sendData() {
 			return () -> this.semaphore.getAndSet(!this.semaphore.get())
-					? "{\"title\": \"Rei Leao\",\"category\": \"Drama\",\"year\": 1982}"
-					: "{\"title\": \"Tropa de Elite\",\"category\": \"title\",\"year\": 1992}";
+					? "{\n\t\"sistemaOrigem\": \"BEMA\",\n\t\"vendasFranquia\": {\n\t\t\"vendaFranquia\": [{\n\t\t\t\"numero\": 2872,\n\t\t\t\"codigo\": 2872,\n\t\t\t\"data\": \"2022-10-07T11:11:49\",\n\t\t\t\"status\": \"ENTREGUE\",\n\t\t\t\"itens\": {\n\t\t\t\t\"itemVenda\": [{\n\t\t\t\t\t\"quantidade\": 1,\n\t\t\t\t\t\"valorTotal\": 104.9,\n\t\t\t\t\t\"produto\": {\n\t\t\t\t\t\t\"sku\": 25411\n\t\t\t\t\t},\n\t\t\t\t\t\"valorDesconto\": 0,\n\t\t\t\t\t\"tipoItem\": \"PADRAO\",\n\t\t\t\t\t\"numeroSequencia\": 1\n\t\t\t\t}]\n\t\t\t},\n\t\t\t\"identificadorPDV\": 5,\n\t\t\t\"funcionarioFranquia\": {\n\t\t\t\t\"documentos\": {\n\t\t\t\t\t\"documento\": [{\n\t\t\t\t\t\t\"valor\": \"98028311580\",\n\t\t\t\t\t\t\"tipoDocumento\": \"CPF\"\n\t\t\t\t\t}]\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"franquia\": {\n\t\t\t\t\"codigo\": 14661\n\t\t\t},\n\t\t\t\"origemPedidoExterno\": \"1\"\n\t\t}]\n\t}\n}" :
+					"{\n\t\"sistemaOrigem\": \"UX\",\n\t\"vendasFranquia\": {\n\t\t\"vendaFranquia\": [{\n\t\t\t\"numero\": 2872,\n\t\t\t\"codigo\": 2872,\n\t\t\t\"data\": \"2022-10-07T11:11:49\",\n\t\t\t\"status\": \"ENTREGUE\",\n\t\t\t\"itens\": {\n\t\t\t\t\"itemVenda\": [{\n\t\t\t\t\t\"quantidade\": 1,\n\t\t\t\t\t\"valorTotal\": 104.9,\n\t\t\t\t\t\"produto\": {\n\t\t\t\t\t\t\"sku\": 25411\n\t\t\t\t\t},\n\t\t\t\t\t\"valorDesconto\": 0,\n\t\t\t\t\t\"tipoItem\": \"PADRAO\",\n\t\t\t\t\t\"numeroSequencia\": 1\n\t\t\t\t}]\n\t\t\t},\n\t\t\t\"identificadorPDV\": 5,\n\t\t\t\"funcionarioFranquia\": {\n\t\t\t\t\"documentos\": {\n\t\t\t\t\t\"documento\": [{\n\t\t\t\t\t\t\"valor\": \"98028311580\",\n\t\t\t\t\t\t\"tipoDocumento\": \"CPF\"\n\t\t\t\t\t}]\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"franquia\": {\n\t\t\t\t\"codigo\": 14661\n\t\t\t},\n\t\t\t\"origemPedidoExterno\": \"1\"\n\t\t}]\n\t}\n}";
 		}
 	}
 }

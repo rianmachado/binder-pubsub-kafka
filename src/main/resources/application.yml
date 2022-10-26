@@ -25,6 +25,7 @@ spring:
             value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
             key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
             schema.registry.url: ${SCHEMA_REGISTRY_URL}
+            specific.avro.reader: true
       default-binder: pubsub
     schemaRegistryClient:
       cached: true
